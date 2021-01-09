@@ -2,19 +2,39 @@
   <div id="app">
     <main>
       <b-container>
-        <b-row class="header">
-          <b-col class="search-box">
-            <input
+        <b-navbar toggleable="lg" type="dark" variant="info">
+          <b-nav-form class="search-box">
+            <b-form-input
               type="text"
               class="search-bar"
               placeholder="Search..."
               v-model="query"
             />
-          </b-col>
-          <b-col>
-            <font-awesome-icon :icon="['fa', 'sort-up']" />
-          </b-col>
-        </b-row>
+          </b-nav-form>
+
+          <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+
+          <b-collapse id="nav-collapse" is-nav>
+            <b-navbar-nav>
+              <b-nav-form>
+                <font-awesome-icon :icon="['fas', 'map-marker-alt']" />
+                <font-awesome-icon :icon="['fa', 'sort']" />
+              </b-nav-form>
+              <b-nav-form>
+                <font-awesome-icon :icon="['fas', 'globe']" />
+                <font-awesome-icon :icon="['fa', 'sort']" />
+              </b-nav-form>
+              <b-nav-form>
+                <font-awesome-icon :icon="['fas', 'map']" />
+                <font-awesome-icon :icon="['fa', 'sort-up']" />
+              </b-nav-form>
+              <b-nav-form>
+                <font-awesome-icon :icon="['fas', 'wind']" />
+                <font-awesome-icon :icon="['fa', 'sort']" />
+              </b-nav-form>
+            </b-navbar-nav>
+          </b-collapse>
+        </b-navbar>
 
         <b-row class="measurement-wrap">
           <b-col>
@@ -29,6 +49,7 @@
               >
 
                 <b-card-header class="location">
+                  <font-awesome-icon :icon="['fas', 'map-marker-alt']" />
                   {{ location.location }}
                 </b-card-header>
                 <b-card-sub-title class="city">
