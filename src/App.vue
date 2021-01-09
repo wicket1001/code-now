@@ -214,11 +214,6 @@ export default {
 
   body {
     font-family: 'montserrat', sans-serif;
-    background-color: blue;
-  }
-
-  main {
-    padding: 25px;
   }
 
   @media (min-width: 600px) {
@@ -234,7 +229,6 @@ export default {
   .header {
     top: 0;
     left: 0;
-    background-color: blue;
     position: fixed;
     width: 100%;
     height: 100px;
@@ -282,7 +276,6 @@ export default {
     flex-shrink: 1;
     padding: 10px 25px;
     margin: 0 20px 50px 20px;
-    color: #FFF;
     background-color: rgba(255, 255, 255, 0.25);
     border-radius: 16px;
   }
