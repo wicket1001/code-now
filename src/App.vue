@@ -16,20 +16,24 @@
 
           <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
-              <b-nav-form>
+              <b-nav-form class="sorter" id="location" @click="sort('location')">
                 <font-awesome-icon :icon="['fas', 'map-marker-alt']" />
                 <font-awesome-icon :icon="['fa', 'sort']" />
               </b-nav-form>
-              <b-nav-form>
-                <font-awesome-icon :icon="['fas', 'globe']" />
-                <font-awesome-icon :icon="['fa', 'sort']" />
-              </b-nav-form>
-              <b-nav-form>
+              <b-nav-form class="sorter" id="city">
                 <font-awesome-icon :icon="['fas', 'map']" />
                 <font-awesome-icon :icon="['fa', 'sort-up']" />
               </b-nav-form>
-              <b-nav-form>
+              <b-nav-form class="sorter" id="value">
                 <font-awesome-icon :icon="['fas', 'wind']" />
+                <font-awesome-icon :icon="['fa', 'sort']" />
+              </b-nav-form>
+              <b-nav-form class="sorter" id="coordinate">
+                <font-awesome-icon :icon="['fas', 'globe']" />
+                <font-awesome-icon :icon="['fa', 'sort']" />
+              </b-nav-form>
+              <b-nav-form class="sorter" id="lastUpdated">
+                <font-awesome-icon :icon="['fas', 'calendar-alt']" />
                 <font-awesome-icon :icon="['fa', 'sort']" />
               </b-nav-form>
             </b-navbar-nav>
@@ -89,8 +93,8 @@
 <script>
 // import { getter } from '@/backend/axiosHelper.js'
 // import axios from 'axios'
-// const OpenAQ = require('openaq')
-// const client = new OpenAQ()
+const OpenAQ = require('openaq')
+const client = new OpenAQ()
 // const client = new openaq
 
 export default {
@@ -102,7 +106,8 @@ export default {
       data: {},
       page: 1,
       limit: 100,
-      busy: false
+      busy: false,
+      sorter: ['location', 'city', 'value', 'coordinates', 'lastUpdated']
     }
   },
   watch: {
@@ -117,6 +122,15 @@ export default {
     reload () {
       this.busy = true
 
+      this.data = {
+        'Loading...': {
+          location: 'Loading',
+          measurements: [{ unit: 'ug/m³', value: 1, parameter: 'co', lastUpdated: '2021-01-10T22:59:00.000Z' }],
+          city: 'St. Pölten',
+          country: 'AT'
+        }
+      }
+      /*
       this.data = {
         Belgium123: {
           location: 'Belgium123',
@@ -138,17 +152,46 @@ export default {
           coordinates: { latitude: -43, longitude: 56 },
           city: 'Oxford',
           country: 'GB'
+        },
+        'Oxford Hall2': {
+          location: 'Oxford Hall2',
+          measurements: [{ unit: 'ppma', value: 6.0, parameter: 'O2', lastUpdated: '2020-11-30T07:03:01.501Z' }],
+          coordinates: { latitude: -43, longitude: 56 },
+          city: 'Oxford',
+          country: 'GB'
+        },
+        'Oxford Hall3': {
+          location: 'Oxford Hall3',
+          measurements: [{ unit: 'ppma', value: 6.0, parameter: 'O2', lastUpdated: '2020-11-30T07:03:01.501Z' }],
+          coordinates: { latitude: -43, longitude: 56 },
+          city: 'Oxford',
+          country: 'GB'
+        },
+        'Oxford Hall4': {
+          location: 'Oxford Hall4',
+          measurements: [{ unit: 'ppma', value: 6.0, parameter: 'O2', lastUpdated: '2020-11-30T07:03:01.501Z' }],
+          coordinates: { latitude: -43, longitude: 56 },
+          city: 'Oxford',
+          country: 'GB'
+        },
+        'Oxford Hall5': {
+          location: 'Oxford Hall5',
+          measurements: [{ unit: 'ppma', value: 6.0, parameter: 'O2', lastUpdated: '2020-11-30T07:03:01.501Z' }],
+          coordinates: { latitude: -43, longitude: 56 },
+          city: 'Oxford',
+          country: 'GB'
         }
       }
+       */
 
       // https://medium.com/dev-genius/why-is-my-fetch-request-to-oauth-server-being-blocked-by-cors-c8bdadb92b30
       // Cross origin wird durch Browser verboten, deshalb Backend
 
-      /*
-      client.latest().then(results => {
-        this.data = results
+      console.log('HERE')
+      client.latest().then(data => {
+        console.log(data.results)
+        this.data = data.results
       })
-      */
 
       this.busy = false
     },
@@ -202,6 +245,16 @@ export default {
       const minute = d.getMinutes()
 
       return `${day}, ${date} ${month}, ${year} ${hour}:${minute}`
+    },
+    sort (parameter) {
+      console.log(parameter)
+      for (const field of this.sorter) {
+        if (field !== parameter) {
+          const form = document.getElementById(field)
+          const icon = form.childNodes[1]
+          console.log(icon)
+        }
+      }
     }
   }
 }
@@ -233,6 +286,10 @@ export default {
     width: 100%;
     height: 100px;
     z-index: 1;
+  }
+
+  .sorter {
+    flex-flow: row !important;
   }
 
   .search-box {
@@ -271,9 +328,7 @@ export default {
 
   .pollution-wrap {
     display: inline-block;
-    width: calc(100% - 40px);
-    flex-grow: 1;
-    flex-shrink: 1;
+    min-width: 500px !important;
     padding: 10px 25px;
     margin: 0 20px 50px 20px;
     background-color: rgba(255, 255, 255, 0.25);
@@ -281,8 +336,8 @@ export default {
   }
 
   .location {
-    font-size: 48px;
-    font-weight: 700;
+    font-size: 38px;
+    font-weight: 600;
     text-shadow: 3px 6px rgba(0, 0, 0, 0.25);
     text-align: center;
     margin: 30px 0;
@@ -294,16 +349,17 @@ export default {
     font-style: italic;
     text-align: center;
     margin: 30px 0;
+    margin-top: 16px !important;
   }
 
   .pollution-box {
     padding: 10px 25px;
-    font-size: 64px;
-    font-weight: 900;
+    font-size: 48px;
+    font-weight: 700;
     text-align: center;
 
     text-shadow: 3px 6px rgba(0, 0, 0, 0.25);
-    background-color: rgba(255, 255, 255, 0.25);
+    background-color: rgba(0, 0, 0, 0.15);
     border-radius: 16px;
     margin: 30px 0;
 
