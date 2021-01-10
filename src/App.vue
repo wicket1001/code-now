@@ -259,7 +259,6 @@ export default {
           limit: this.perPage,
           page: this.currentPage
         }).then(data => {
-          console.log(data.results)
           for (const set of data.results) {
             let element = {}
             element = { city: set.city, coordinates: set.coordinates, country: set.country, location: set.location }
@@ -271,13 +270,11 @@ export default {
             element.lastUpdated = set.measurements[0].lastUpdated
             this.items.push(element)
           }
-          console.log(this.items)
           this.busy = false
         })
       }
     },
     loadMore () {
-      console.log('Loading additional')
       this.currentPage += 1
       this.reload()
     },
