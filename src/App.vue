@@ -142,8 +142,6 @@
         <b-table
           :items="items"
           :fields="fields"
-          :current-page="currentPage"
-          :per-page="perPage"
           :filter="filter"
           :filter-included-fields="filterOn"
           :sort-by.sync="sortBy"
@@ -274,9 +272,6 @@ export default {
             this.items.push(element)
           }
           console.log(this.items)
-          for (const i of this.items) {
-            console.log(i.measurement.parameter)
-          }
           this.busy = false
         })
       }
